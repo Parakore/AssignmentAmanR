@@ -1,0 +1,9 @@
+{
+  "transitions": [
+    { "action": "VERIFY", "from": "APPLIED", "to": "PENDING_APPROVAL", "roles": ["VERIFIER"] },
+    { "action": "SEND_BACK", "from": "PENDING_APPROVAL", "to": "APPLIED", "roles": ["VERIFIER"] },
+    { "action": "APPROVE", "from": "PENDING_APPROVAL", "to": "APPROVED", "roles": ["APPROVER"] },
+    { "action": "REJECT", "from": "PENDING_APPROVAL", "to": "REJECTED", "roles": ["APPROVER"] },
+    { "action": "CANCEL", "from": "APPLIED", "to": "CANCELLED", "roles": ["APPLICANT"] }
+  ]
+}

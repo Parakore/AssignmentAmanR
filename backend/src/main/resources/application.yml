@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/rcp}
+    username: ${SPRING_DATASOURCE_USERNAME:rcp}
+    password: ${SPRING_DATASOURCE_PASSWORD:rcp}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+server:
+  port: ${SERVER_PORT:8080}
+  error:
+    include-message: never
+app:
+  search:
+    max-limit: 100

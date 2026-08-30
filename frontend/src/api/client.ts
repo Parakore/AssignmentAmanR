@@ -1,0 +1,10 @@
+import type {Identity,CalcInput,Calculation,ApplicationView} from '../types';
+const base=import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080';
+export function envelope(identity:Identity,msgId:string){return {apiId:'portal',msgId,userInfo:identity};}
+async function request<T>(path:string,body:unknown):Promise<T>{const r=await fetch(`${base}/rcp/v1/${path}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const data=await r.json();if(!r.ok){throw new Error(data?.Errors?.[0]?.message||'Request failed. Check the API and try again.');}return data as T;}
+export function calculate(identity:Identity,input:CalcInput){return request<{Calculation:Calculation}>('_calculate',{RequestInfo:envelope(identity,'calc-'+Date.now()),Calculation:input});}
+export function create(identity:Identity,input:CalcInput & {mobileNumber:string}){return request<{Application:ApplicationView}>('_create',{RequestInfo:envelope(identity,'create-'+Date.now()),Application:input});}
+export function search(identity:Identity,filters:{status?:string;applicationNumber?:string;mobileNumber?:string}){return request<{applications:ApplicationView[];total:number}>('_search',{RequestInfo:envelope(identity,'search-'+Date.now()),Search:{tenantId:identity.tenantId,...filters,offset:0,limit:50}});}
+export function getApplication(identity:Identity,applicationNumber:string){return request<{Application:ApplicationView}>('_get',{RequestInfo:envelope(identity,'get-'+Date.now()),Application:{tenantId:identity.tenantId,applicationNumber}});}
+export function action(identity:Identity,applicationNumber:string,actionName:string,comment:string){return request<{Application:ApplicationView}>('_action',{RequestInfo:envelope(identity,'action-'+Date.now()),Action:{tenantId:identity.tenantId,applicationNumber,action:actionName,comment}});}
+export function updateApplication(identity:Identity,input:CalcInput & {applicationNumber:string;mobileNumber:string}){return request<{Application:ApplicationView}>('_update',{RequestInfo:envelope(identity,'update-'+Date.now()),Application:input});}

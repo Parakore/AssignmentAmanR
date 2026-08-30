@@ -1,0 +1,2 @@
+import type {Transition} from '../types';
+export function Timeline({items}:{items:Transition[]}){return <div className="timeline">{items.map((x,i)=><div className="event" key={`${x.timestamp}-${i}`}><div className="dot"/><div><b>{x.action} → {x.toStatus}</b><div className="muted">{new Date(x.timestamp).toLocaleString()} · {x.actorRole} · {x.actorUuid}</div>{x.comment&&<div>{x.comment}</div>}</div></div>)}</div>}
